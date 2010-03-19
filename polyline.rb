@@ -14,7 +14,7 @@ module GoogleMapsEncodedPolyline
       break if code & 0x20 == 0
     end
 
-    raise(ArgumentError) unless (1..4) == buffer.size
+    raise(ArgumentError) unless (1..6).include?(buffer.size)
 
     bin = buffer.map { |code| '%05b' % code }.reverse.join("")
 
@@ -27,13 +27,23 @@ module GoogleMapsEncodedPolyline
     return num
   end
 
-=begin
   def self.decode_polyline(io)
     polylines = []
 
+    until io.eof?
+      lat = self.read_fragment(io)
+      lng = self.read_fragment(io)
+
+      unless polylines.empty?
+        lat += polylines.last[0]
+        lng += polylines.last[1]
+      end
+
+      polylines << [lat, lng]
+    end
+
     return polylines
   end
-=end
 
   def self.encode_levels(io, levels)
     levels.each { |level|
@@ -92,18 +102,36 @@ if $0 == __FILE__
       assert_equal(-18000000, @module.read_fragment(sio("~fsia@")))
     end
 
-    def test_read_fragment
+    def test_read_fragment__invalid
       assert_raise(ArgumentError) {
         @module.read_fragment(sio(""))
       }
     end
 
-=begin
     def test_decode_polyline__simple
-      assert_equal([], @module.decode_polyline(sio("")))
-      assert_equal([0, 0], @module.decode_polyline(sio("??")))
+      assert_equal(
+        [[0, 0]],
+        @module.decode_polyline(sio("??")))
+      assert_equal(
+        [[0, 0], [0, 0]],
+        @module.decode_polyline(sio("????")))
+      assert_equal(
+        [[1, 0]],
+        @module.decode_polyline(sio("A?")))
+      assert_equal(
+        [[0, 1]],
+        @module.decode_polyline(sio("?A")))
+      assert_equal(
+        [[1, 1], [1, 1]],
+        @module.decode_polyline(sio("AA??")))
+      #assert_equal([], @module.decode_polyline(sio("")))
     end
-=end
+
+    def test_decode_polyline__invalid
+      assert_raise(ArgumentError) {
+        @module.decode_polyline(sio("?"))
+      }
+    end
 
     def test_encode_levels__simple
       assert_equal("",  @module.encode_levels(sio, []).string)
