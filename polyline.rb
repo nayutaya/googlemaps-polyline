@@ -124,7 +124,9 @@ if $0 == __FILE__
       assert_equal(
         [[1, 1], [1, 1]],
         @module.decode_polyline(sio("AA??")))
-      #assert_equal([], @module.decode_polyline(sio("")))
+      assert_equal(
+        [[1, 2], [2, 4], [3, 8], [4, 16], [5, 32]],
+        @module.decode_polyline(sio("ACACAGAOA_@")))
     end
 
     def test_decode_polyline__invalid
