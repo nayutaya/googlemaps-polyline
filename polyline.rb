@@ -5,6 +5,28 @@
 require "stringio"
 
 module GoogleMapsEncodedPolyline
+  def self.read_fragment(io)
+    buffer = []
+
+    while (char = io.read(1))
+      code = char.unpack("C")[0] - 63
+      buffer << code
+      break if code & 0x20 == 0
+    end
+
+    p buffer
+
+    return buffer[0]
+  end
+
+=begin
+  def self.decode_polyline(io)
+    polylines = []
+
+    return polylines
+  end
+=end
+
   def self.encode_levels(io, levels)
     levels.each { |level|
       case level
@@ -51,6 +73,17 @@ if $0 == __FILE__
     def setup
       @module = GoogleMapsEncodedPolyline
     end
+
+    def test_read_fragment
+      assert_equal(0, @module.read_fragment(sio("?")))
+    end
+
+=begin
+    def test_decode_polyline__simple
+      assert_equal([], @module.decode_polyline(sio("")))
+      assert_equal([0, 0], @module.decode_polyline(sio("??")))
+    end
+=end
 
     def test_encode_levels__simple
       assert_equal("",  @module.encode_levels(sio, []).string)
