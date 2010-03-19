@@ -2,6 +2,7 @@
 
 # Google Mapエンコード化ポリラインを扱うライブラリの試作コード
 
+require "stringio"
 
 module GoogleMapsEncodedPolyline
   def self.encode_levels(levels)
@@ -16,16 +17,20 @@ module GoogleMapsEncodedPolyline
     }.join("")
   end
 
-  def self.decode_levels(data)
-    return data.chars.map { |char|
+  def self.decode_levels(io)
+    levels = []
+
+    while (char = io.read(1))
       case char
-      when "?" then 0
-      when "@" then 1
-      when "A" then 2
-      when "B" then 3
+      when "?" then levels << 0
+      when "@" then levels << 1
+      when "A" then levels << 2
+      when "B" then levels << 3
       else raise(ArgumentError)
       end
-    }
+    end
+
+    return levels
   end
 end
 
@@ -54,7 +59,7 @@ if $0 == __FILE__
     end
 
     def test_encode_levels__multiple
-      assert_equal("?@AB",  @module.encode_levels([0, 1, 2, 3]))
+      assert_equal("?@AB", @module.encode_levels([0, 1, 2, 3]))
     end
 
     def test_encode_levels__invalid
@@ -64,21 +69,27 @@ if $0 == __FILE__
     end
 
     def test_decode_levels__simple
-      assert_equal([],  @module.decode_levels(""))
-      assert_equal([0], @module.decode_levels("?"))
-      assert_equal([1], @module.decode_levels("@"))
-      assert_equal([2], @module.decode_levels("A"))
-      assert_equal([3], @module.decode_levels("B"))
+      assert_equal([],  @module.decode_levels(sio("")))
+      assert_equal([0], @module.decode_levels(sio("?")))
+      assert_equal([1], @module.decode_levels(sio("@")))
+      assert_equal([2], @module.decode_levels(sio("A")))
+      assert_equal([3], @module.decode_levels(sio("B")))
     end
 
     def test_decode_levels__multiple
-      assert_equal([0, 1, 2, 3],  @module.decode_levels("?@AB"))
+      assert_equal([0, 1, 2, 3], @module.decode_levels(sio("?@AB")))
     end
 
     def test_decode_levels__invalid
       assert_raise(ArgumentError) {
-        @module.decode_levels(" ")
+        @module.decode_levels(sio(" "))
       }
+    end
+
+    private
+
+    def sio(string)
+      return StringIO.new(string)
     end
   end
 end
