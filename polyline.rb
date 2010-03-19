@@ -10,13 +10,32 @@ module GoogleMapsEncodedPolyline
 
     while (char = io.read(1))
       code = char.unpack("C")[0] - 63
-      buffer << code
+      buffer << (code & ~0x20)
       break if code & 0x20 == 0
     end
 
-    p buffer
+    bin1 = buffer.map { |code| '%05b' % code }.reverse.join("")
+    p negative = (bin1.slice!(-1, 1) == "1")
 
-    return buffer[0]
+    bin1 = "0" * ((8 * 4) - bin1.size) + bin1
+    #bin1.tr!("01", "10") if negative
+    p bin1
+
+    num  = bin1.to_i(2)
+    num *= -1 if negative
+    num += -1 if negative
+
+    #num += bin1.slice!(0, 8).to_i(2) << (8 * 0)
+    #num += bin1.slice!(0, 8).to_i(2) << (8 * 1)
+    #num += bin1.slice!(0, 8).to_i(2) << (8 * 2)
+    #num += bin1.slice!(0, 8).to_i(2) << (8 * 3)
+    p num
+    #p '%08b' % bin1.slice!(0, 8).to_i(2)
+    #p '%08b' % bin1.slice!(0, 8).to_i(2)
+    #p '%08b' % bin1.slice!(0, 8).to_i(2)
+
+
+    return num
   end
 
 =begin
@@ -76,6 +95,9 @@ if $0 == __FILE__
 
     def test_read_fragment
       assert_equal(0, @module.read_fragment(sio("?")))
+      assert_equal(-17998321, @module.read_fragment(sio("`~oia@")))
+      #assert_equal(1, @module.read_fragment(sio("_ibE")))
+      #assert_equal(2, @module.read_fragment(sio("_seK")))
     end
 
 =begin
