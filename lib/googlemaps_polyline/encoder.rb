@@ -18,16 +18,24 @@ module GoogleMapsPolyline
       begin
         code = (num & 0b11111) + 63
         num >>= 5
-        code |= 0x20 if num > 0
+        code += 0x20 if num > 0
         codes << code
       end while num > 0
 
-      return codes.pack("C*")
+      io.write(codes.pack("C*"))
+
+      return io
     end
 
-=begin
     def self.encode_points(io, points)
+      plat, plng = 0, 0
+      points.each { |lat, lng|
+        self.write_num(io, lat - plat)
+        self.write_num(io, lng - plng)
+        plat, plng = lat, lng
+      }
+
+      return io
     end
-=end
   end
 end
