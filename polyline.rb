@@ -14,6 +14,8 @@ module GoogleMapsEncodedPolyline
       break if code & 0x20 == 0
     end
 
+    raise(ArgumentError) unless (1..4) == buffer.size
+
     bin = buffer.map { |code| '%05b' % code }.reverse.join("")
 
     negative = (bin.slice!(-1, 1) == "1")
@@ -88,6 +90,12 @@ if $0 == __FILE__
       assert_equal(-12345678, @module.read_fragment(sio("zsopV")))
       assert_equal( 18000000, @module.read_fragment(sio("_gsia@")))
       assert_equal(-18000000, @module.read_fragment(sio("~fsia@")))
+    end
+
+    def test_read_fragment
+      assert_raise(ArgumentError) {
+        @module.read_fragment(sio(""))
+      }
     end
 
 =begin
