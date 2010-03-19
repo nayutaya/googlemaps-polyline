@@ -10,14 +10,13 @@ class EncoderTest < Test::Unit::TestCase
   end
 
   def test_write_num
-    assert_equal("`~oia@"     , @mod.write_num(sio,         -17998321))
-    #assert_equal("?"     , @mod.write_num(sio,         0))
-    #assert_equal("A"     , @mod.write_num(sio,         1))
-    #assert_equal("@"     , @mod.write_num(sio,        -1))
-    #assert_equal("{sopV" , @mod.write_num(sio,  12345678))
-    #assert_equal("zsopV" , @mod.write_num(sio, -12345678))
-    #assert_equal("_gsia@", @mod.write_num(sio,  18000000))
-    #assert_equal("~fsia@", @mod.write_num(sio, -18000000))
+    assert_equal("?"     , @mod.write_num(sio,         0))
+    assert_equal("A"     , @mod.write_num(sio,         1))
+    assert_equal("@"     , @mod.write_num(sio,        -1))
+    assert_equal("{sopV" , @mod.write_num(sio,  12345678))
+    assert_equal("zsopV" , @mod.write_num(sio, -12345678))
+    assert_equal("?gsia@", @mod.write_num(sio,  18000000))
+    assert_equal("~fsia@", @mod.write_num(sio, -18000000))
   end
 
 =begin
