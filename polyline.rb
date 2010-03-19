@@ -11,6 +11,7 @@ module GoogleMapsEncodedPolyline
       when "@" then 1
       when "A" then 2
       when "B" then 3
+      else raise(ArgumentError)
       end
     }
   end
@@ -32,12 +33,22 @@ if $0 == __FILE__
       @module = GoogleMapsEncodedPolyline
     end
 
-    def test_decode_levels
+    def test_decode_levels__simple
       assert_equal([],  @module.decode_levels(""))
       assert_equal([0], @module.decode_levels("?"))
       assert_equal([1], @module.decode_levels("@"))
       assert_equal([2], @module.decode_levels("A"))
       assert_equal([3], @module.decode_levels("B"))
+    end
+
+    def test_decode_levels__multiple
+      assert_equal([0, 1, 2, 3],  @module.decode_levels("?@AB"))
+    end
+
+    def test_decode_levels__multiple
+      assert_raise(ArgumentError) {
+        assert_equal([0, 1, 2, 3],  @module.decode_levels(" "))
+      }
     end
   end
 end
