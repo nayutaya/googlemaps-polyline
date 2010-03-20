@@ -49,6 +49,7 @@ module GoogleMapsPolyline
       when 1 then return "@"
       when 2 then return "A"
       when 3 then return "B"
+      else raise(ArgumentError)
       end
     end
   end

@@ -77,6 +77,12 @@ class EncoderTest < Test::Unit::TestCase
     assert_equal("B", pack_level[3])
   end
 
+  def test_pack_level__invalid
+    assert_raise(ArgumentError) {
+      @encoder.instance_eval { pack_level(-1) }
+    }
+  end
+
   private
 
   def sio(string = nil)
