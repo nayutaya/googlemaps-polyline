@@ -16,14 +16,14 @@ class EncoderTest < Test::Unit::TestCase
     assert_same(io, encoder.io)
   end
 
-  def test_write_num
-    assert_equal("?"     , @klass.new(sio).write_num(        0).string)
-    assert_equal("A"     , @klass.new(sio).write_num(        1).string)
-    assert_equal("@"     , @klass.new(sio).write_num(       -1).string)
-    assert_equal("{sopV" , @klass.new(sio).write_num( 12345678).string)
-    assert_equal("zsopV" , @klass.new(sio).write_num(-12345678).string)
-    assert_equal("_gsia@", @klass.new(sio).write_num( 18000000).string)
-    assert_equal("~fsia@", @klass.new(sio).write_num(-18000000).string)
+  def test_pack_num
+    assert_equal("?"     , @encoder.pack_num(        0))
+    assert_equal("A"     , @encoder.pack_num(        1))
+    assert_equal("@"     , @encoder.pack_num(       -1))
+    assert_equal("{sopV" , @encoder.pack_num( 12345678))
+    assert_equal("zsopV" , @encoder.pack_num(-12345678))
+    assert_equal("_gsia@", @encoder.pack_num( 18000000))
+    assert_equal("~fsia@", @encoder.pack_num(-18000000))
   end
 
   def test_encode_points__1
