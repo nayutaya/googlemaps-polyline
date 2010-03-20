@@ -6,13 +6,14 @@ require "stringio"
 
 class EncoderTest < Test::Unit::TestCase
   def setup
-    @klass = GoogleMapsPolyline::Encoder
+    @klass   = GoogleMapsPolyline::Encoder
+    @encoder = @klass.new(sio)
   end
 
   def test_initialize
     io = sio
-    @encoder = @klass.new(io)
-    assert_same(io, @encoder.io)
+    encoder = @klass.new(io)
+    assert_same(io, encoder.io)
   end
 
   def test_write_num
@@ -25,31 +26,46 @@ class EncoderTest < Test::Unit::TestCase
     assert_equal("~fsia@", @klass.write_num(sio, -18000000).string)
   end
 
-  def test_encode_points
+  def test_encode_points__1
     assert_equal(
       "",
-      @klass.encode_points(sio, []).string)
+      @encoder.encode_points([]).string)
+  end
+
+  def test_encode_points__2
     assert_equal(
       "??",
-      @klass.encode_points(sio, [[0, 0]]).string)
+      @encoder.encode_points([[0, 0]]).string)
+  end
+
+  def test_encode_points__3
     assert_equal(
       "????",
-      @klass.encode_points(sio, [[0, 0], [0, 0]]).string)
+      @encoder.encode_points([[0, 0], [0, 0]]).string)
+  end
+
+  def test_encode_points__4
     assert_equal(
       "A?",
-      @klass.encode_points(sio, [[1, 0]]).string)
+      @encoder.encode_points([[1, 0]]).string)
+  end
+
+  def test_encode_points__5
     assert_equal(
       "?A",
-      @klass.encode_points(sio, [[0, 1]]).string)
+      @encoder.encode_points([[0, 1]]).string)
+  end
+
+  def test_encode_points__6
     assert_equal(
       "AA??",
-      @klass.encode_points(sio, [[1, 1], [1, 1]]).string)
+      @encoder.encode_points([[1, 1], [1, 1]]).string)
   end
 
   def test_encode_points__complex
     assert_equal(
       "ACACAGAOA_@",
-      @klass.encode_points(sio, [[1, 2], [2, 4], [3, 8], [4, 16], [5, 32]]).string)
+      @encoder.encode_points([[1, 2], [2, 4], [3, 8], [4, 16], [5, 32]]).string)
   end
 
   private

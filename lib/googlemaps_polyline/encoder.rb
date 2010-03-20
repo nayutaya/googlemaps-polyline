@@ -7,6 +7,11 @@ module GoogleMapsPolyline
     end
 
     attr_reader :io
+
+    def encode_points(points)
+      self.class.encode_points(@io, points)
+      return @io
+    end
     
     def self.write_num(io, num)
       negative = (num < 0)
