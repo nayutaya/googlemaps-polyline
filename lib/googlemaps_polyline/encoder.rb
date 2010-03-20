@@ -11,8 +11,8 @@ module GoogleMapsPolyline
     def encode_points(points)
       plat, plng = 0, 0
       points.each { |lat, lng|
-        @io.write(pack_num(lat - plat))
-        @io.write(pack_num(lng - plng))
+        @io.write(pack_point(lat - plat))
+        @io.write(pack_point(lng - plng))
         plat, plng = lat, lng
       }
 
@@ -21,7 +21,7 @@ module GoogleMapsPolyline
 
     private
 
-    def pack_num(num)
+    def pack_point(num)
       negative = (num < 0)
       if negative
         num -= -1
