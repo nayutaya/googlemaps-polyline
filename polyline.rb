@@ -45,20 +45,6 @@ module GoogleMapsEncodedPolyline
     return polylines
   end
 
-  def self.encode_levels(io, levels)
-    levels.each { |level|
-      case level
-      when 0 then io.write("?")
-      when 1 then io.write("@")
-      when 2 then io.write("A")
-      when 3 then io.write("B")
-      else raise(ArgumentError)
-      end
-    }
-
-    return io
-  end
-
   def self.decode_levels(io)
     levels = []
 
@@ -132,24 +118,6 @@ if $0 == __FILE__
     def test_decode_polyline__invalid
       assert_raise(ArgumentError) {
         @module.decode_polyline(sio("?"))
-      }
-    end
-
-    def test_encode_levels__simple
-      assert_equal("",  @module.encode_levels(sio, []).string)
-      assert_equal("?", @module.encode_levels(sio, [0]).string)
-      assert_equal("@", @module.encode_levels(sio, [1]).string)
-      assert_equal("A", @module.encode_levels(sio, [2]).string)
-      assert_equal("B", @module.encode_levels(sio, [3]).string)
-    end
-
-    def test_encode_levels__multiple
-      assert_equal("?@AB", @module.encode_levels(sio, [0, 1, 2, 3]).string)
-    end
-
-    def test_encode_levels__invalid
-      assert_raise(ArgumentError) {
-        @module.encode_levels(sio, [-1])
       }
     end
 
