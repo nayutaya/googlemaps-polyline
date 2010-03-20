@@ -11,15 +11,15 @@ module GoogleMapsPolyline
     def encode_points(points)
       plat, plng = 0, 0
       points.each { |lat, lng|
-        self.class.write_num(@io, lat - plat)
-        self.class.write_num(@io, lng - plng)
+        self.write_num(lat - plat)
+        self.write_num(lng - plng)
         plat, plng = lat, lng
       }
 
       return @io
     end
     
-    def self.write_num(io, num)
+    def write_num(num)
       negative = (num < 0)
       if negative
         num -= -1
@@ -38,9 +38,9 @@ module GoogleMapsPolyline
         codes << code
       end while num > 0
 
-      io.write(codes.pack("C*"))
+      @io.write(codes.pack("C*"))
 
-      return io
+      return @io
     end
   end
 end
