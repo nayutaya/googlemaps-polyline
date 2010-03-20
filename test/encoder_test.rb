@@ -44,6 +44,9 @@ class EncoderTest < Test::Unit::TestCase
     assert_equal(
       "AA??",
       @klass.encode_points(sio, [[1, 1], [1, 1]]).string)
+  end
+
+  def test_encode_points__complex
     assert_equal(
       "ACACAGAOA_@",
       @klass.encode_points(sio, [[1, 2], [2, 4], [3, 8], [4, 16], [5, 32]]).string)
