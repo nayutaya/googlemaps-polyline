@@ -58,6 +58,12 @@ class EncoderTest < Test::Unit::TestCase
       @encoder.encode_points([[1, 2], [2, 4], [3, 8], [4, 16], [5, 32]]).string)
   end
 
+  def test_encode_levels
+    assert_equal(
+      "?@AB",
+      @encoder.encode_levels([0, 1, 2, 3]).string)
+  end
+
   def test_pack_point
     pack_point = proc { |num| @encoder.instance_eval { pack_point(num) } }
     assert_equal("?"     , pack_point[        0])

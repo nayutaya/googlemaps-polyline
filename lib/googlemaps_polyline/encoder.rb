@@ -19,6 +19,14 @@ module GoogleMapsPolyline
       return @io
     end
 
+    def encode_levels(levels)
+      levels.each { |level|
+        @io.write(pack_level(level))
+      }
+
+      return @io
+    end
+
     private
 
     def pack_point(num)
