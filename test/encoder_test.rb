@@ -62,7 +62,7 @@ class EncoderTest < Test::Unit::TestCase
       @encoder.encode_points([[1, 1], [1, 1]]).string)
   end
 
-  def test_encode_points__complex
+  def test_encode_points__7
     assert_equal(
       "ACACAGAOA_@",
       @encoder.encode_points([[1, 2], [2, 4], [3, 8], [4, 16], [5, 32]]).string)

@@ -9,7 +9,13 @@ module GoogleMapsPolyline
     attr_reader :io
 
     def encode_points(points)
-      self.class.encode_points(@io, points)
+      plat, plng = 0, 0
+      points.each { |lat, lng|
+        self.class.write_num(@io, lat - plat)
+        self.class.write_num(@io, lng - plng)
+        plat, plng = lat, lng
+      }
+
       return @io
     end
     
@@ -33,17 +39,6 @@ module GoogleMapsPolyline
       end while num > 0
 
       io.write(codes.pack("C*"))
-
-      return io
-    end
-
-    def self.encode_points(io, points)
-      plat, plng = 0, 0
-      points.each { |lat, lng|
-        self.write_num(io, lat - plat)
-        self.write_num(io, lng - plng)
-        plat, plng = lat, lng
-      }
 
       return io
     end
