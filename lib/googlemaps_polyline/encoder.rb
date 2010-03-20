@@ -1,8 +1,13 @@
 # coding: utf-8
 
 module GoogleMapsPolyline
-  module Encoder
+  class Encoder
+    def initialize(io)
+      @io = io
+    end
 
+    attr_reader :io
+    
     def self.write_num(io, num)
       negative = (num < 0)
       if negative

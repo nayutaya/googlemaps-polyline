@@ -7,6 +7,13 @@ require "stringio"
 class EncoderTest < Test::Unit::TestCase
   def setup
     @mod = GoogleMapsPolyline::Encoder
+    @klass = GoogleMapsPolyline::Encoder
+  end
+
+  def test_initialize
+    io = sio
+    @encoder = @klass.new(io)
+    assert_same(io, @encoder.io)
   end
 
   def test_write_num
