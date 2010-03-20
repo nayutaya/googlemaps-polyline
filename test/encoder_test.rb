@@ -16,17 +16,6 @@ class EncoderTest < Test::Unit::TestCase
     assert_same(io, encoder.io)
   end
 
-  def test_pack_num
-    pack_num = proc { |num| @encoder.instance_eval { pack_num(num) } }
-    assert_equal("?"     , pack_num[        0])
-    assert_equal("A"     , pack_num[        1])
-    assert_equal("@"     , pack_num[       -1])
-    assert_equal("{sopV" , pack_num[ 12345678])
-    assert_equal("zsopV" , pack_num[-12345678])
-    assert_equal("_gsia@", pack_num[ 18000000])
-    assert_equal("~fsia@", pack_num[-18000000])
-  end
-
   def test_encode_points__1
     assert_equal(
       "",
@@ -67,6 +56,17 @@ class EncoderTest < Test::Unit::TestCase
     assert_equal(
       "ACACAGAOA_@",
       @encoder.encode_points([[1, 2], [2, 4], [3, 8], [4, 16], [5, 32]]).string)
+  end
+
+  def test_pack_num
+    pack_num = proc { |num| @encoder.instance_eval { pack_num(num) } }
+    assert_equal("?"     , pack_num[        0])
+    assert_equal("A"     , pack_num[        1])
+    assert_equal("@"     , pack_num[       -1])
+    assert_equal("{sopV" , pack_num[ 12345678])
+    assert_equal("zsopV" , pack_num[-12345678])
+    assert_equal("_gsia@", pack_num[ 18000000])
+    assert_equal("~fsia@", pack_num[-18000000])
   end
 
   private
