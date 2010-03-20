@@ -69,6 +69,14 @@ class EncoderTest < Test::Unit::TestCase
     assert_equal("~fsia@", pack_point[-18000000])
   end
 
+  def test_pack_level
+    pack_level = proc { |level| @encoder.instance_eval { pack_level(level) } }
+    assert_equal("?", pack_level[0])
+    assert_equal("@", pack_level[1])
+    assert_equal("A", pack_level[2])
+    assert_equal("B", pack_level[3])
+  end
+
   private
 
   def sio(string = nil)

@@ -42,5 +42,12 @@ module GoogleMapsPolyline
 
       return codes.pack("C*")
     end
+
+    def pack_level(level)
+      return "B" if level == 3
+      return "A" if level == 2
+      return "@" if level == 1
+      return "?"
+    end
   end
 end
