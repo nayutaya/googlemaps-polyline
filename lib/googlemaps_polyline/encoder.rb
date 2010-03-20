@@ -44,10 +44,12 @@ module GoogleMapsPolyline
     end
 
     def pack_level(level)
-      return "B" if level == 3
-      return "A" if level == 2
-      return "@" if level == 1
-      return "?"
+      case level
+      when 0 then return "?"
+      when 1 then return "@"
+      when 2 then return "A"
+      when 3 then return "B"
+      end
     end
   end
 end
