@@ -17,13 +17,14 @@ class EncoderTest < Test::Unit::TestCase
   end
 
   def test_pack_num
-    assert_equal("?"     , @encoder.pack_num(        0))
-    assert_equal("A"     , @encoder.pack_num(        1))
-    assert_equal("@"     , @encoder.pack_num(       -1))
-    assert_equal("{sopV" , @encoder.pack_num( 12345678))
-    assert_equal("zsopV" , @encoder.pack_num(-12345678))
-    assert_equal("_gsia@", @encoder.pack_num( 18000000))
-    assert_equal("~fsia@", @encoder.pack_num(-18000000))
+    pack_num = proc { |num| @encoder.instance_eval { pack_num(num) } }
+    assert_equal("?"     , pack_num[        0])
+    assert_equal("A"     , pack_num[        1])
+    assert_equal("@"     , pack_num[       -1])
+    assert_equal("{sopV" , pack_num[ 12345678])
+    assert_equal("zsopV" , pack_num[-12345678])
+    assert_equal("_gsia@", pack_num[ 18000000])
+    assert_equal("~fsia@", pack_num[-18000000])
   end
 
   def test_encode_points__1
