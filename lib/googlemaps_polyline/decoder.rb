@@ -9,21 +9,21 @@ module GoogleMapsPolyline
     attr_reader :io
 
     def decode_points
-      polylines = []
+      points = []
 
       until @io.eof?
         lat = read_point(@io)
         lng = read_point(@io)
 
-        unless polylines.empty?
-          lat += polylines.last[0]
-          lng += polylines.last[1]
+        unless points.empty?
+          lat += points.last[0]
+          lng += points.last[1]
         end
 
-        polylines << [lat, lng]
+        points << [lat, lng]
       end
 
-      return polylines
+      return points
     end
 
     def decode_levels
@@ -39,17 +39,17 @@ module GoogleMapsPolyline
     private
 
     def read_point(io)
-      buffer = []
+      codes = []
 
       while (char = io.read(1))
         code = char.unpack("C")[0] - 63
-        buffer << (code & ~0x20)
+        codes << (code & ~0x20)
         break if code & 0x20 == 0
       end
 
-      raise(ArgumentError) unless (1..6).include?(buffer.size)
+      raise(ArgumentError) unless (1..6).include?(codes.size)
 
-      bin = buffer.map { |code| '%05b' % code }.reverse.join("")
+      bin = codes.map { |c| '%05b' % c }.reverse.join("")
 
       negative = (bin.slice!(-1, 1) == "1")
 

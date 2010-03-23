@@ -6,8 +6,7 @@ require "stringio"
 
 class DecoderTest < Test::Unit::TestCase
   def setup
-    @klass   = GoogleMapsPolyline::Decoder
-    @decoder = @klass.new(sio)
+    @klass = GoogleMapsPolyline::Decoder
   end
 
   def test_initialize
@@ -53,11 +52,14 @@ class DecoderTest < Test::Unit::TestCase
   end
 
   def test_decode_levels
-    assert_equal([0, 1, 2, 3], @klass.new(sio("?@AB")).decode_levels)
+    assert_equal(
+      [0, 1, 2, 3],
+      @klass.new(sio("?@AB")).decode_levels)
   end
 
   def test_read_point
-    read_point = proc { |io| @decoder.instance_eval { read_point(io) } }
+    decoder = @klass.new(sio)
+    read_point = proc { |io| decoder.instance_eval { read_point(io) } }
     assert_equal(        0, read_point[sio("?")])
     assert_equal(        1, read_point[sio("A")])
     assert_equal(       -1, read_point[sio("@")])
@@ -69,7 +71,8 @@ class DecoderTest < Test::Unit::TestCase
   end
 
   def test_read_level
-    read_level = proc { |io| @decoder.instance_eval { read_level(io) } }
+    decoder = @klass.new(sio)
+    read_level = proc { |io| decoder.instance_eval { read_level(io) } }
     assert_equal(0, read_level[sio("?")])
     assert_equal(1, read_level[sio("@")])
     assert_equal(2, read_level[sio("A")])
