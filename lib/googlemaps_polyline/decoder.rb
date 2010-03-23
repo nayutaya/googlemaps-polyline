@@ -8,6 +8,7 @@ module GoogleMapsPolyline
 
     attr_reader :io
 
+    # FIXME: 削除予定
     def self.decode_polyline(io)
       polylines = []
 
@@ -26,6 +27,7 @@ module GoogleMapsPolyline
       return polylines
     end
 
+    # FIXME: 削除予定
     def self.read_fragment(io)
       buffer = []
 
@@ -59,6 +61,28 @@ module GoogleMapsPolyline
     end
 
     private
+
+    def read_point(io)
+      buffer = []
+
+      while (char = io.read(1))
+        code = char.unpack("C")[0] - 63
+        buffer << (code & ~0x20)
+        break if code & 0x20 == 0
+      end
+
+      raise(ArgumentError) unless (1..6).include?(buffer.size)
+
+      bin = buffer.map { |code| '%05b' % code }.reverse.join("")
+
+      negative = (bin.slice!(-1, 1) == "1")
+
+      num  = bin.to_i(2)
+      num *= -1 if negative
+      num += -1 if negative
+
+      return num
+    end
 
     def read_level(io)
       case io.read(1)

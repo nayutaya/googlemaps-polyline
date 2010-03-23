@@ -47,6 +47,7 @@ class DecoderTest < Test::Unit::TestCase
     assert_equal([0, 1, 2, 3], @klass.new(sio("?@AB")).decode_levels)
   end
 
+  # FIXME: 削除予定
   def test_read_fragment
     assert_equal(        0, @klass.read_fragment(sio("?")))
     assert_equal(        1, @klass.read_fragment(sio("A")))
@@ -57,10 +58,23 @@ class DecoderTest < Test::Unit::TestCase
     assert_equal(-18000000, @klass.read_fragment(sio("~fsia@")))
   end
 
+  # FIXME: 削除予定
   def test_read_fragment__invalid
     assert_raise(ArgumentError) {
       @klass.read_fragment(sio(""))
     }
+  end
+
+  def test_read_point
+    read_point = proc { |io| @decoder.instance_eval { read_point(io) } }
+    assert_equal(        0, read_point[sio("?")])
+    assert_equal(        1, read_point[sio("A")])
+    assert_equal(       -1, read_point[sio("@")])
+    assert_equal( 12345678, read_point[sio("{sopV")])
+    assert_equal(-12345678, read_point[sio("zsopV")])
+    assert_equal( 18000000, read_point[sio("_gsia@")])
+    assert_equal(-18000000, read_point[sio("~fsia@")])
+    assert_raise(ArgumentError) { read_point[sio("")] }
   end
 
   def test_read_level
