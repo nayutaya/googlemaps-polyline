@@ -51,15 +51,17 @@ module GoogleMapsPolyline
     def decode_levels
       levels = []
 
-      while (char = @io.read(1))
-        levels << unpack_level(char)
+      until @io.eof?
+        levels << read_level(@io)
       end
 
       return levels
     end
 
-    def unpack_level(char)
-      case char
+    private
+
+    def read_level(io)
+      case io.read(1)
       when "?" then return 0
       when "@" then return 1
       when "A" then return 2

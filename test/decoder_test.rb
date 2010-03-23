@@ -63,13 +63,13 @@ class DecoderTest < Test::Unit::TestCase
     }
   end
 
-  def test_unpack_level
-    unpack_level = proc { |char| @decoder.unpack_level(char) }
-    assert_equal(0, unpack_level["?"])
-    assert_equal(1, unpack_level["@"])
-    assert_equal(2, unpack_level["A"])
-    assert_equal(3, unpack_level["B"])
-    assert_raise(ArgumentError) { unpack_level[""] }
+  def test_read_level
+    read_level = proc { |io| @decoder.instance_eval { read_level(io) } }
+    assert_equal(0, read_level[sio("?")])
+    assert_equal(1, read_level[sio("@")])
+    assert_equal(2, read_level[sio("A")])
+    assert_equal(3, read_level[sio("B")])
+    assert_raise(ArgumentError) { read_level[sio("")] }
   end
 
   private
