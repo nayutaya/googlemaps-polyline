@@ -8,6 +8,16 @@ module GoogleMapsPolyline
 
     attr_reader :io
 
+    def decode_levels
+      levels = []
+
+      while (char = @io.read(1))
+        levels << unpack_level(char)
+      end
+
+      return levels
+    end
+
     def unpack_level(char)
       case char
       when "?" then return 0

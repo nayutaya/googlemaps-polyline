@@ -16,6 +16,10 @@ class DecoderTest < Test::Unit::TestCase
     assert_same(io, encoder.io)
   end
 
+  def test_decode_levels
+    assert_equal([0, 1, 2, 3], @klass.new(sio("?@AB")).decode_levels)
+  end
+
   def test_unpack_level
     unpack_level = proc { |char| @decoder.unpack_level(char) }
     assert_equal(0, unpack_level["?"])
