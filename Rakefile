@@ -13,20 +13,22 @@ Rake::TestTask.new do |test|
   test.verbose    =  true
 end
 
-desc "bump version"
-task :bump do
-  cur_version  = PACKAGE_VERSION
-  next_version = cur_version.succ
-  puts("#{cur_version} -> #{next_version}")
+namespace :version do
+  desc "bump version"
+  task :bump do
+    cur_version  = PACKAGE_VERSION
+    next_version = cur_version.succ
+    puts("#{cur_version} -> #{next_version}")
 
-  filename = File.join(File.dirname(__FILE__), "lib", "googlemaps_polyline", "version.rb")
-  File.open(filename, "wb") { |file|
-    file.puts(%|# coding: utf-8|)
-    file.puts(%||)
-    file.puts(%|module GoogleMapsPolyline|)
-    file.puts(%|  VERSION = "#{next_version}"|)
-    file.puts(%|end|)
-  }
+    filename = File.join(File.dirname(__FILE__), "lib", "googlemaps_polyline", "version.rb")
+    File.open(filename, "wb") { |file|
+      file.puts(%|# coding: utf-8|)
+      file.puts(%||)
+      file.puts(%|module GoogleMapsPolyline|)
+      file.puts(%|  VERSION = "#{next_version}"|)
+      file.puts(%|end|)
+    }
+  end
 end
 
 namespace :gem do
