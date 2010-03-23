@@ -27,6 +27,13 @@ class CoreTest < Test::Unit::TestCase
     assert_equal("BA@?B",       levels)
   end
 
+  def test_decode_points_and_levels
+    expected = [[[0, 0]], [3]]
+    assert_equal(
+      expected,
+      @mod.decode_points_and_levels("??", "B"))
+  end
+
   def test_decode_polyline_1e5__1
     expected = [[0, 0, 3]]
     assert_equal(

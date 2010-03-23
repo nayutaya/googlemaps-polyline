@@ -16,9 +16,14 @@ module GoogleMapsPolyline
     return self.encode_points_and_levels(points, levels)
   end
 
-  def self.decode_polyline_1e5(points, levels)
+  def self.decode_points_and_levels(points, levels)
     decoded_points = Decoder.new(StringIO.new(points)).decode_points
     decoded_levels = Decoder.new(StringIO.new(levels)).decode_levels
+    return decoded_points, decoded_levels
+  end
+
+  def self.decode_polyline_1e5(points, levels)
+    decoded_points, decoded_levels = self.decode_points_and_levels(points, levels)
     return decoded_points.zip(decoded_levels).map { |a| a.flatten }
   end
 end
