@@ -16,6 +16,42 @@ class DecoderTest < Test::Unit::TestCase
     assert_same(io, encoder.io)
   end
 
+  def test_decode_points__1
+    assert_equal(
+      [[0, 0]],
+      @klass.new(sio("??")).decode_points)
+  end
+
+  def test_decode_points__2
+    assert_equal(
+      [[0, 0], [0, 0]],
+      @klass.new(sio("????")).decode_points)
+  end
+
+  def test_decode_points__3
+    assert_equal(
+      [[1, 0]],
+      @klass.new(sio("A?")).decode_points)
+  end
+
+  def test_decode_points__4
+    assert_equal(
+      [[0, 1]],
+      @klass.new(sio("?A")).decode_points)
+  end
+
+  def test_decode_points__5
+    assert_equal(
+      [[1, 1], [1, 1]],
+      @klass.new(sio("AA??")).decode_points)
+  end
+
+  def test_decode_points__6
+    assert_equal(
+      [[1, 2], [2, 4], [3, 8], [4, 16], [5, 32]],
+      @klass.new(sio("ACACAGAOA_@")).decode_points)
+  end
+
   def test_decode_polyline__simple
     assert_equal(
       [[0, 0]],

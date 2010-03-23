@@ -50,6 +50,10 @@ module GoogleMapsPolyline
       return num
     end
 
+    def decode_points
+      return self.class.decode_polyline(@io)
+    end
+
     def decode_levels
       levels = []
 
