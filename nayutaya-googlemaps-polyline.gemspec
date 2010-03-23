@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     "nayutaya-googlemaps-polyline.gemspec",
     "nayutaya-googlemaps-polyline.gemspec.erb",
     "Rakefile",
+    "README.md",
     "test/core_test.rb",
     "test/decoder_test.rb",
     "test/encoder_test.rb",
