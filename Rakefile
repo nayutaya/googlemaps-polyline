@@ -29,28 +29,30 @@ task :bump do
   }
 end
 
-desc "generate gemspec"
-task :gemspec do
-  require "erb"
+namespace :gem do
+  desc "generate gemspec"
+  task :spec do
+    require "erb"
 
-  src = File.open("#{PACKAGE_NAME}.gemspec.erb", "rb") { |file| file.read }
-  erb = ERB.new(src, nil, "-")
+    src = File.open("#{PACKAGE_NAME}.gemspec.erb", "rb") { |file| file.read }
+    erb = ERB.new(src, nil, "-")
 
-  files      = Dir.glob("**/*").select { |s| File.file?(s) }.reject { |s| /\.gem\z/ =~ s }
-  test_files = Dir.glob("test/**").select { |s| File.file?(s) }
+    files      = Dir.glob("**/*").select { |s| File.file?(s) }.reject { |s| /\.gem\z/ =~ s }
+    test_files = Dir.glob("test/**").select { |s| File.file?(s) }
 
-  File.open("#{PACKAGE_NAME}.gemspec", "wb") { |file|
-    file.write(erb.result(binding))
-  }
-end
+    File.open("#{PACKAGE_NAME}.gemspec", "wb") { |file|
+      file.write(erb.result(binding))
+    }
+  end
 
-desc "build gem"
-task :build do
-  sh "gem build #{PACKAGE_NAME}.gemspec"
-end
+  desc "build gem"
+  task :build do
+    sh "gem build #{PACKAGE_NAME}.gemspec"
+  end
 
-desc "push gem"
-task :push do
-  target = "#{PACKAGE_NAME}-#{PACKAGE_VERSION}.gem"
-  sh "gem push #{target}"
+  desc "push gem"
+  task :push do
+    target = "#{PACKAGE_NAME}-#{PACKAGE_VERSION}.gem"
+    sh "gem push #{target}"
+  end
 end
