@@ -14,6 +14,11 @@ Rake::TestTask.new do |test|
 end
 
 namespace :version do
+  desc "show current version"
+  task :show do
+    puts(PACKAGE_VERSION)
+  end
+
   desc "bump version"
   task :bump do
     cur_version  = PACKAGE_VERSION
