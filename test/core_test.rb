@@ -27,6 +27,13 @@ class CoreTest < Test::Unit::TestCase
     assert_equal("BA@?B",       levels)
   end
 
+  def test_encode_polyline
+    points, levels = @mod.encode_polyline(
+      [[34.69025, 135.19501, 3], [34.69363, 135.50192, 3]])
+    assert_equal("amvrEygdxXcTe}z@", points)
+    assert_equal("BB",               levels)
+  end
+
   def test_decode_points_and_levels
     expected = [[[0, 0]], [3]]
     assert_equal(
@@ -46,6 +53,13 @@ class CoreTest < Test::Unit::TestCase
     assert_equal(
       expected,
       @mod.decode_polyline_1e5("ACACAGAOA_@", "BA@?B"))
+  end
+
+  def test_decode_polyline
+    expected = [[34.69025, 135.19501, 3], [34.69363, 135.50192, 3]]
+    assert_equal(
+      expected,
+      @mod.decode_polyline("amvrEygdxXcTe}z@", "BB"))
   end
 
   def test_encode_and_decode
