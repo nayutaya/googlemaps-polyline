@@ -44,8 +44,13 @@ namespace :gem do
     src = File.open("#{PACKAGE_NAME}.gemspec.erb", "rb") { |file| file.read }
     erb = ERB.new(src, nil, "-")
 
-    files      = Dir.glob("**/*").select { |s| File.file?(s) }.reject { |s| /\.gem\z/ =~ s }
-    test_files = Dir.glob("test/**").select { |s| File.file?(s) }
+    files = Dir.glob("**/*").
+      select { |s| File.file?(s) }.
+      reject { |s| /\.gem\z/ =~ s }.
+      reject { |s| /\Anbproject\// =~ s }
+
+    test_files = Dir.glob("test/**").
+      select { |s| File.file?(s) }
 
     File.open("#{PACKAGE_NAME}.gemspec", "wb") { |file|
       file.write(erb.result(binding))
