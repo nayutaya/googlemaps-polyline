@@ -48,11 +48,15 @@ class CoreTest < Test::Unit::TestCase
       @mod.decode_polyline_1e5("ACACAGAOA_@", "BA@?B"))
   end
 
-=begin
   def test_encode_and_decode
     srand(0)
-    points = 20.times.map { [rand * 180 - 90, rand * 360 - 180] }
-    levels = [3] + 18.times.map { rand(4) } + [3]
+    points1 = 20.times.map { [rand(180 * 1e5) - 90 * 1e5, rand(360 * 1e5) - 180 * 1e5] }.map { |lat, lng| [lat.to_i, lng.to_i] }
+    levels1 = [3] + 18.times.map { rand(4) } + [3]
+
+    points2, levels2 = @mod.encode_points_and_levels(points1, levels1)
+    points3, levels3 = @mod.decode_points_and_levels(points2, levels2)
+
+    assert_equal(points1, points3)
+    assert_equal(levels1, levels3)
   end
-=end
 end
