@@ -4,14 +4,14 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0")
   s.required_ruby_version     = Gem::Requirement.new(">= 1.8.6")
 
-  s.name    = <%= NAME.dump %>
-  s.version = <%= version.dump %>
-  s.date    = <%= date.dump %>
+  s.name    = <%= PACKAGE_NAME.dump %>
+  s.version = <%= PACKAGE_VERSION.dump %>
+  s.date    = <%= Time.now.strftime("%Y-%m-%d").dump %>
 
   s.authors = ["Yuya Kato"]
   s.email   = "yuyakato@gmail.com"
 
-  s.summary     = "Polyline Encoder/Decoder for Google Maps API"
+  s.summary     = "Google Maps Polyline Utility"
   s.description = "Polyline Encoder/Decoder for Google Maps API"
   s.homepage    = "http://github.com/nayutaya/googlemaps-polyline/"
 

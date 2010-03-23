@@ -2,7 +2,8 @@
 require "rake/testtask"
 require "lib/googlemaps_polyline/version"
 
-NAME = "nayutaya-googlemaps-polyline"
+PACKAGE_NAME    = "nayutaya-googlemaps-polyline"
+PACKAGE_VERSION = GoogleMapsPolyline::VERSION
 
 task :default => :test
 
@@ -14,7 +15,7 @@ end
 
 desc "bump version"
 task :bump do
-  cur_version  = GoogleMapsPolyline::VERSION
+  cur_version  = PACKAGE_VERSION
   next_version = cur_version.succ
   puts("#{cur_version} -> #{next_version}")
 
@@ -32,27 +33,24 @@ desc "generate gemspec"
 task :gemspec do
   require "erb"
 
-  src  = File.open("#{NAME}.gemspec.erb", "rb") { |file| file.read }
-  erb  = ERB.new(src, nil, "-")
-
-  version = GoogleMapsPolyline::VERSION
-  date    = Time.now.strftime("%Y-%m-%d")
+  src = File.open("#{PACKAGE_NAME}.gemspec.erb", "rb") { |file| file.read }
+  erb = ERB.new(src, nil, "-")
 
   files      = Dir.glob("**/*").select { |s| File.file?(s) }.reject { |s| /\.gem\z/ =~ s }
   test_files = Dir.glob("test/**").select { |s| File.file?(s) }
 
-  File.open("#{NAME}.gemspec", "wb") { |file|
+  File.open("#{PACKAGE_NAME}.gemspec", "wb") { |file|
     file.write(erb.result(binding))
   }
 end
 
 desc "build gem"
 task :build do
-  sh "gem build #{NAME}.gemspec"
+  sh "gem build #{PACKAGE_NAME}.gemspec"
 end
 
 desc "push gem"
 task :push do
-  target = "#{NAME}-#{GoogleMapsPolyline::VERSION}.gem"
+  target = "#{PACKAGE_NAME}-#{PACKAGE_VERSION}.gem"
   sh "gem push #{target}"
 end
